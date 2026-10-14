@@ -1,0 +1,42 @@
+{
+  "name": "@workslo/fleet",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fleet V1 shared project control plane",
+  "scripts": {
+    "dev": "node dev-server.mjs",
+    "lint": "npm run typecheck",
+    "types": "wrangler types",
+    "typecheck": "npm run types && tsc --noEmit && tsc --project worker/test/tsconfig.json --noEmit && tsc --project board/tsconfig.json --noEmit && tsc --project routines/tsconfig.json --noEmit && tsc --project tsconfig.node.json --noEmit",
+    "test": "vitest run --config vitest.routines.config.ts && vitest run && node --test operations/*.test.mjs",
+    "build": "vite build",
+    "config:check": "node scripts/check-production-config.mjs",
+    "deploy:dry": "npm run config:check && wrangler deploy --dry-run",
+    "check": "npm run typecheck && npm test && npm run build && npm run deploy:dry && npm run recovery:rehearse",
+    "recovery:rehearse": "node operations/rehearse-recovery.mjs"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.3.2",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.6",
+    "@types/node": "26.4.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "@vitejs/plugin-react": "6.1.1",
+    "jsdom": "30.0.1",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.143.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "jose": "6.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  }
+}
